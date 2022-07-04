@@ -1,3 +1,5 @@
+# Temporary fork: Implements nanoserde (https://github.com/seladb/pickledb-rs/pull/30) AND load_or_new (https://github.com/seladb/pickledb-rs/pull/22) 
+
 # PickleDB
 
 [![Rust test](https://github.com/seladb/pickledb-rs/workflows/Rust%20test/badge.svg)](https://github.com/seladb/pickledb-rs/actions?query=workflow%3A%22Rust+test%22)

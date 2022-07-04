@@ -17,7 +17,7 @@ mod imports {
 use imports::*;
 
 /// An enum that determines the policy of dumping PickleDb changes into the file
-
+#[derive(Copy, Clone)]
 pub enum PickleDbDumpPolicy {
     /// Never dump any change, file will always remain read-only
     NeverDump,
@@ -43,6 +43,34 @@ pub struct PickleDb {
 }
 
 impl PickleDb {
+    /// Attempts to load a DB from a file, and if it fails to load, constructs a new `PickleDb` instance.
+    ///
+    /// # Arguments
+    ///
+    /// * `db_path` - a path where the DB will be stored
+    /// * `dump_policy` - an enum value that determines the policy of dumping DB changes into the file. Please see
+    ///    [PickleDb::load()](#method.load) to understand the different policy options
+    /// * `serialization_method` - the serialization method to use for storing the data to memory and file
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use pickledb::{PickleDb, PickleDbDumpPolicy, SerializationMethod};
+    ///
+    /// let mut db = PickleDb::load_or_new("example.db", PickleDbDumpPolicy::AutoDump, SerializationMethod::Json);
+    /// ```
+    ///
+    pub fn load_or_new<P: AsRef<Path> + Clone>(
+        db_path: P,
+        dump_policy: PickleDbDumpPolicy,
+        serialization_method: SerializationMethod,
+    ) -> PickleDb {
+        match PickleDb::load(db_path.clone(), dump_policy, serialization_method) {
+            Ok(load) => load,
+            Err(_) => PickleDb::new(db_path, dump_policy, serialization_method),
+        }
+    }
+
     /// Constructs a new `PickleDb` instance.
     ///
     /// # Arguments
